@@ -41,7 +41,7 @@ Give a list of cell types related to CVDs, the number of exclusive peaks are as 
 
 | Cell type | Number of exclusive pearks|
 | ---- | ---- |
-| fHeart, Replicate: ENCLB491BID | 19715 |
-| fLeftAtrium, Replicate: ENCLB226FNM | 10466 |
-| fLeftVentricle, Replicate: ENCLB231DPY | 23797 |
-| fRightVentricle, Replicate: ENCLB608VQR | 15412 |
+| Cell type: fHeart, Replicate: ENCLB491BID | Number of exclusive peaks: 19715 |
+| Cell type: fLeftAtrium, Replicate: ENCLB226FNM | Number of exclusive peaks: 10466 |
+| Cell type: fLeftVentricle, Replicate: ENCLB231DPY | Number of exclusive peaks: 23797 |
+| Cell type: fRightVentricle, Replicate: ENCLB608VQR | Number of exclusive peaks: 15412 |
