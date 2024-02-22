@@ -8,9 +8,11 @@ Recently, the Meuleman team generated a comprehensive common coordinate system o
 <!-- blank line -->
 <br>
 <!-- blank line -->
-This repo is created in order to process DHSs data, apply advanced AI models for predicting cell- and tissue-specific regulatory elemetns implicated in CVD pathogenesis.
+This repository is created in order to process DHSs data, apply advanced AI models for predicting cell- and tissue-specific regulatory elemetns implicated in CVD pathogenesis.
+
 ## Usage
-The main script in this repo. is **process_DHS_data.py**. It includes three functions:
+
+The main script in this repository is **process_DHS_data.py**. It includes three functions:
 1) download_data()
 2) master_dataset()
 3) filter_master()
