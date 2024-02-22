@@ -68,8 +68,82 @@ In addition, there are two other python scripts:
 
 DNABERT, a pre-trained tranasformer deep learning model (https://github.com/jerryji1993/DNABERT/tree/master?tab=readme-ov-file), is used to study the DHS dataset. 
 
+First, create and activate a virtual environment named dnabert:
 
+```
+conda create -n dnabert python=3.6
+conda activate dnabert
+```
 
+Second, install the package and other python libraries:
+```
+conda install pytorch torchvision cudatoolkit=10.0 -c pytorch
+git clone https://github.com/jerryji1993/DNABERT
+cd DNABERT
+python3 -m pip install --editable .
+cd examples
+python3 -m pip install -r requirements.txt
+```
+
+Next, download pre-train data "DNABERT6" (if set kmer=6) from
+```
+https://drive.google.com/file/d/1BJjqb5Dl2lNMg2warsFQ0-Xvn1xxfFXC/view?usp=sharing
+unzip 6-new-12w-0.zip
+```
+
+Next, Fine-tune with pre-trained model
+```
+cd examples
+
+export KMER=6
+export MODEL_PATH=PATH_TO_THE_PRETRAINED_MODEL
+export DATA_PATH=sample_data/ft/$KMER
+export OUTPUT_PATH=./ft/$KMER
+
+python run_finetune.py \
+    --model_type dna \
+    --tokenizer_name=dna$KMER \
+    --model_name_or_path $MODEL_PATH \
+    --task_name dnaprom \
+    --do_train \
+    --do_eval \
+    --data_dir $DATA_PATH \
+    --max_seq_length 100 \
+    --per_gpu_eval_batch_size=32   \
+    --per_gpu_train_batch_size=32   \
+    --learning_rate 2e-4 \
+    --num_train_epochs 5.0 \
+    --output_dir $OUTPUT_PATH \
+    --evaluate_during_training \
+    --logging_steps 100 \
+    --save_steps 4000 \
+    --warmup_percent 0.1 \
+    --hidden_dropout_prob 0.1 \
+    --overwrite_output \
+    --weight_decay 0.01 \
+    --n_process 8
+```
+
+Next, after the model is fine-tuned, we an run predictions as follows:
+```
+export KMER=6
+export MODEL_PATH=./ft/$KMER
+export DATA_PATH=sample_data/ft/$KMER
+export PREDICTION_PATH=./result/$KMER
+
+python run_finetune.py \
+    --model_type dna \
+    --tokenizer_name=dna$KMER \
+    --model_name_or_path $MODEL_PATH \
+    --task_name dnaprom \
+    --do_predict \
+    --data_dir $DATA_PATH  \
+    --max_seq_length 75 \
+    --per_gpu_pred_batch_size=128   \
+    --output_dir $MODEL_PATH \
+    --predict_dir $PREDICTION_PATH \
+    --n_process 48
+```
 
 DNABERT requires GPU and recommend HPC for large-scale datasets. Lacking the necessary computer resources currently, no results can be shown here.
 
