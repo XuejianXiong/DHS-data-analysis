@@ -18,9 +18,11 @@ This repository is created in order to process DHSs data, and apply advanced AI 
 ## Usage
 
 First, clone this repository into your local computer:
-'''
+
+```
 git clone git@github.com:XuejianXiong/DHS-data-analysis.git
-'''
+```
+
 
 The main script in this repository is **process_DHS_data.py**. It includes three functions:
 
