@@ -23,8 +23,27 @@ First, clone this repository into your local computer:
 git clone git@github.com:XuejianXiong/DHS-data-analysis.git
 ```
 
+Second, create "database" and "data" folders if not exist:
 
-The main script in this repository is **process_DHS_data.py**. It includes three functions:
+```
+cd DHS-data-analysis
+mkdir database
+mkdir data
+```
+
+Next, run the main script **process_DHS_data.py**. 
+
+```
+python process_DHS_data.py
+```
+
+If any required python library, e.g. pandas, is missing, install it using pip3
+
+```
+pip3 install pandas
+``` 
+
+**process_DHS_data.py** includes three functions:
 
 1) download_data(): download all necessary DHSs data files.
 2) master_dataset(): generate a master dataset with information of ~3.6M DHS and 733 biosamples.
