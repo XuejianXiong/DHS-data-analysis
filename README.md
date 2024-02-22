@@ -12,7 +12,7 @@ Recently, the Meuleman team generated a comprehensive common coordinate system o
 <br>
 <!-- blank line -->
 
-This repository is created in order to process DHSs data, apply advanced AI models for predicting cell- and tissue-specific regulatory elemetns implicated in CVD pathogenesis.
+This repository is created in order to process DHSs data, and apply advanced AI models for predicting cell- and tissue-specific regulatory elemetns implicated in CVD pathogenesis.
 
 
 ## Usage
@@ -39,7 +39,7 @@ Give a list of cell types related to CVDs, the number of exclusive peaks are as 
 
 | Cell type | Number of exclusive pearks|
 | ---- | ---- |
-| Cell type: fHeart, Replicate: ENCLB491BID | Number of exclusive peaks: 19715 |
-| Cell type: fLeftAtrium, Replicate: ENCLB226FNM | Number of exclusive peaks: 10466 |
-| Cell type: fLeftVentricle, Replicate: ENCLB231DPY | Number of exclusive peaks: 23797 |
-| Cell type: fRightVentricle, Replicate: ENCLB608VQR | Number of exclusive peaks: 15412 |
+| fHeart, Replicate: ENCLB491BID | 19715 |
+| fLeftAtrium, Replicate: ENCLB226FNM | 10466 |
+| fLeftVentricle, Replicate: ENCLB231DPY | 23797 |
+| fRightVentricle, Replicate: ENCLB608VQR | 15412 |
