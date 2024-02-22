@@ -12,10 +12,12 @@ Recently, the Meuleman team generated a comprehensive common coordinate system o
 <br>
 <!-- blank line -->
 
-This repository is created in order to process DHSs data, and apply advanced AI models for predicting cell- and tissue-specific regulatory elemetns implicated in CVD pathogenesis.
+This repository is created in order to process DHSs data, and apply advanced AI models for predicting cell- and tissue-specific regulatory elements implicated in CVD pathogenesis.
 
 
 ## Usage
+
+### DHS data processing
 
 First, clone this repository into your local computer:
 
@@ -60,6 +62,17 @@ In addition, there are two other python scripts:
 <!-- blank line -->
 <br>
 <!-- blank line -->
+
+
+### DNABERT model
+
+DNABERT, a pre-trained tranasformer deep learning model (https://github.com/jerryji1993/DNABERT/tree/master?tab=readme-ov-file), is used to study the DHS dataset. 
+
+
+
+
+DNABERT requires GPU and recommend HPC for large-scale datasets. Lacking the necessary computer resources currently, no results can be shown here.
+
 
 ## Results
 
