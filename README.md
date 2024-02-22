@@ -76,8 +76,8 @@ conda activate dnabert
 ```
 
 Second, install the package and other python libraries:
-```
 
+```
 conda install pytorch torchvision cudatoolkit=10.0 -c pytorch
 git clone https://github.com/jerryji1993/DNABERT
 cd DNABERT
@@ -86,14 +86,19 @@ cd examples
 python3 -m pip install -r requirements.txt
 ```
 
-Next, download pre-train data "DNABERT6" (if set kmer=6) from
+Next, download pre-train data "DNABERT6" (if set kmer=6):
+
 ```
 cd PATH_TO_THE_PRETRAINED_MODEL
+
+download from 
 https://drive.google.com/file/d/1BJjqb5Dl2lNMg2warsFQ0-Xvn1xxfFXC/view?usp=sharing
+
 unzip 6-new-12w-0.zip
 ```
 
 Next, Fine-tune with pre-trained model
+
 ```
 cd examples
 chmod +x fine_tune.sh
