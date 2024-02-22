@@ -1,9 +1,11 @@
 import pandas as pd
 
 
-# Functions used to create sequence column
+# Functions used to create sequence columns
 def sequence_bounds(summit: int, start: int, end: int, length: int):
-    """Calculate the sequence coordinates (bounds) for a given DHS.
+    """
+    Calculate the sequence coordinates (bounds) for a given DHS.
+
     https://github.com/meuleman/SynthSeqs/blob/main/make_data/process.py
     """
     half = length // 2
