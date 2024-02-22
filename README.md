@@ -37,6 +37,8 @@ In addition, there are two other python scripts:
 
 Give a list of cell types related to CVDs, the number of exclusive peaks are as follows:
 
+| Cell type | Number of exclusive pearks|
+| ---- | ---- |
 | Cell type: fHeart, Replicate: ENCLB491BID | Number of exclusive peaks: 19715 |
 | Cell type: fLeftAtrium, Replicate: ENCLB226FNM | Number of exclusive peaks: 10466 |
 | Cell type: fLeftVentricle, Replicate: ENCLB231DPY | Number of exclusive peaks: 23797 |
