@@ -96,54 +96,15 @@ unzip 6-new-12w-0.zip
 Next, Fine-tune with pre-trained model
 ```
 cd examples
-export KMER=6
-export MODEL_PATH=PATH_TO_THE_PRETRAINED_MODEL
-export DATA_PATH=sample_data/ft/$KMER
-export OUTPUT_PATH=./ft/$KMER
-
-python run_finetune.py \
-    --model_type dna \
-    --tokenizer_name=dna$KMER \
-    --model_name_or_path $MODEL_PATH \
-    --task_name dnaprom \
-    --do_train \
-    --do_eval \
-    --data_dir $DATA_PATH \
-    --max_seq_length 100 \
-    --per_gpu_eval_batch_size=32   \
-    --per_gpu_train_batch_size=32   \
-    --learning_rate 2e-4 \
-    --num_train_epochs 5.0 \
-    --output_dir $OUTPUT_PATH \
-    --evaluate_during_training \
-    --logging_steps 100 \
-    --save_steps 4000 \
-    --warmup_percent 0.1 \
-    --hidden_dropout_prob 0.1 \
-    --overwrite_output \
-    --weight_decay 0.01 \
-    --n_process 8
+chmod +x fine_tune.sh
+.fine_tune.sh
 ```
 
 Next, after the model is fine-tuned, we an run predictions as follows:
 ```
-export KMER=6
-export MODEL_PATH=./ft/$KMER
-export DATA_PATH=sample_data/ft/$KMER
-export PREDICTION_PATH=./result/$KMER
-
-python run_finetune.py \
-    --model_type dna \
-    --tokenizer_name=dna$KMER \
-    --model_name_or_path $MODEL_PATH \
-    --task_name dnaprom \
-    --do_predict \
-    --data_dir $DATA_PATH  \
-    --max_seq_length 75 \
-    --per_gpu_pred_batch_size=128   \
-    --output_dir $MODEL_PATH \
-    --predict_dir $PREDICTION_PATH \
-    --n_process 48
+cd examples
+chmod +x prediction.sh
+.prediction.sh
 ```
 
 ### Issues:
