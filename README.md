@@ -146,7 +146,8 @@ python run_finetune.py \
     --n_process 48
 ```
 
-DNABERT requires GPU and recommend HPC for large-scale datasets. Lacking the necessary computer resources currently, no results can be shown at and after fine-tune step.
+### Issues:
+DNABERT requires GPU and recommend HPC for large-scale datasets. Lacking the necessary computer resources currently, no results can be shown from DNABERT modeling.
 
 
 ## Results
