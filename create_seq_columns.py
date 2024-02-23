@@ -18,7 +18,7 @@ def sequence_bounds(summit: int, start: int, end: int, length: int):
     return summit - half, summit + half
 
 
-def add_sequence_column(df: pd.DataFrame, genome, length: int):
+def add_sequence_column(df: pd.DataFrame, genome, length: int) -> pd.DataFrame:
     """
     Query the reference genome for each DHS and add the raw sequences
     to the dataframe.

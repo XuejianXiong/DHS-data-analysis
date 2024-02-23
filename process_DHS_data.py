@@ -206,7 +206,7 @@ def filter_master(cell_list: List[str]) -> pd.DataFrame:
       return sub_df
 
 
-def seq2kmer(seq, k: int):
+def seq2kmer(seq: str, k: int) -> str:
     """
     Convert original sequence to kmers
     
@@ -261,8 +261,6 @@ def main() -> None:
     # Convert sequence into Kmers format
     kmers = seq2kmer(seq, n_kmer)
     print(kmers)
-
-
 
 
 
