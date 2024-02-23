@@ -1,13 +1,17 @@
 # DHS-data-analysis
 
 DNase I hypersensitive sites (DHSs) are crucial genetic markers of regulatory DNA regions, harboring significant genetic information linked to cardiovascular diseases (CVDs). Given the profound impact of CVDs on global health, there is a pressing need for a deeper understanding of the underlying genetic and regulartory mechanisms.
+
 <!-- blank line -->
 <br>
 <!-- blank line -->
+
 The Meuleman team recently developed a comprehensive common coordinate system for DHSs, integrating data from 733 human biosamples including 438 cell and tissue types and states. This effort resulted in the numerical indexing of ~3.6 million DHSs, providing a valuable resource for regulatory DNA analysis (https://www.meuleman.org/research/dhsindex/).
+
 <!-- blank line -->
 <br>
 <!-- blank line -->
+
 This repository is created to facilitate the processing of DHSs data and the application of advanced AI models for predicting cell- and tissue-specific regulatory elements implicated in the pathogenesis of CVDs. By leveraging these cutting-edge techniques, we aim to uncover insights into the regulatory landsape underlying CVDs, ultimately contributing to the development of novel therapeutic interventions and diagnostic strategies.
 
 ## Usage
@@ -39,9 +43,8 @@ If any required python library, e.g. pandas, is missing, install it using pip3.
 ```
 pip3 install pandas
 ``` 
-<!-- blank line -->
-<br>
-<!-- blank line -->
+
+
 **process_DHS_data.py** includes three functions as follows,
 
 1) download_data(): download all necessary DHSs data files.
@@ -107,7 +110,7 @@ chmod +x prediction.sh
 .prediction.sh
 ```
 
-### Issues:
+### Issues
 
 DNABERT requires GPU resources and is optimized for high-performace computing (HPC), particularly when dealing with large-scale datasets. However, due to the current unavailability of adequate computational resources, we are unable to present any results from DNABERT modeling at this time.
 
