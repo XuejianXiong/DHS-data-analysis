@@ -13,34 +13,30 @@ def download_data() -> None:
 
     db_path = "./database"
       
-    #### Downloading human genome
+    #### Downloading human reference genome
     os.system(f"wget https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz -P {db_path}/")
     os.system(f"gzip -d {db_path}/hg38.fa.gz")
 
-    #### Downloading 733 biosample metadata
-    # Metadata files describing biosample characteristics and annotations
+    #### Downloading DHS biosample metadata
+    # Metadata files describing 733 biosample characteristics and annotations
     os.system(f"wget https://www.meuleman.org/DHS_Index_and_Vocabulary_metadata.tsv -P {db_path}/")
 
-    #### Downloading basis array
-    # Non-negative Matrix Factorization (NMF) results, 
-    # decomposing the presence/absence matrix (hg38) into 16 components.
-    #
-    # It contains a 733 row (biosample) x 16 (component) peak presence/abscence 
+    #### Downloading basis array from Non-negative Matrix Factorization (NMF) 
+    # It contains a 733 (biosample) x 16 (component) peak presence/abscence 
     # matrix (not a binary matrix)
-    #
     # Used later to map component number within metadata dataframe and 
     # find proportion for given component
     os.system(f"wget https://zenodo.org/record/3838751/files/2018-06-08NC16_NNDSVD_Basis.npy.gz -P {db_path}/")
     os.system(f"gzip -d {db_path}/2018-06-08NC16_NNDSVD_Basis.npy.gz")
 
-    #### Downloading matrix array
-    # The mixture array contains 3.5M x 16 matrix of 
-    # peak presence/absence decomposed into 16 components
+    #### Downloading matrix array from Non-negative Matrix Factorization (NMF) 
+    # It contains 3.5M (DHS) x 16 (component) peak presence/absence
+    # matrix (not a binary matrix)
     os.system(f"wget https://zenodo.org/record/3838751/files/2018-06-08NC16_NNDSVD_Mixture.npy.gz -P {db_path}/")
     os.system(f"gzip -d {db_path}/2018-06-08NC16_NNDSVD_Mixture.npy.gz")
 
-    # Loading in DHS_Index_and_Vocabulary of ~3.6M DHSs that contains 
-    # the following information:
+    # Downloading the DHS_Index_and_Vocabulary matrix of ~3.6M DHSs
+    # It contains the following information:
     # seqname, start, end, identifier, mean_signal, numsaples, summit, 
     # core_start, core_end, component
     #
@@ -49,14 +45,17 @@ def download_data() -> None:
     os.system(f"wget https://www.meuleman.org/DHS_Index_and_Vocabulary_hg38_WM20190703.txt.gz -P {db_path}/")
     os.system(f"gunzip -d {db_path}/DHS_Index_and_Vocabulary_hg38_WM20190703.txt.gz")
     
-    # Downloading binary peak matrix file
-    # Presence/absence matrix of DHSs (rows) versus biosamples (columns)
+    # Downloading the binary peak matrix
+    # It contains presence/absence matrix of ~3.6M DHSs (rows) versus biosamples (columns)
     os.system(f"wget https://zenodo.org/records/3838751/files/dat_bin_FDR01_hg38.txt.gz -P {db_path}/")
     os.system(f"gzip -d {db_path}/dat_bin_FDR01_hg38.txt.gz")
     
 
 
 def master_dataset() -> None:
+    """
+    Creating master dataset from downloaded data
+    """
 
     db_path = "./database"
     d_path = "./data"
@@ -75,18 +74,16 @@ def master_dataset() -> None:
 
 
     #### Basis matrix
-    # Contains a 733 row (biosample) x 16 (component) peak presence/abscence 
-    # matrix (not a binary matrix)
-    # Used later to map component number within metadata dataframe and 
-    # find proportion for given component
-    
     # Converting npy file to csv
     basis_array = np.load(f"{db_path}/2018-06-08NC16_NNDSVD_Basis.npy")
     np.savetxt(f"{db_path}/2018-06-08NC16_NNDSVD_Basis.csv", basis_array, delimiter=",")
 
+    # Component columns names
+    component_columns = ["C" + str(i) for i in range(1, 17)]
+
     # Creating nmf_loadings matrix from csv
     nmf_loadings1 = pd.read_csv(f"{db_path}/2018-06-08NC16_NNDSVD_Basis.csv", header=None)
-    nmf_loadings1.columns = ["C" + str(i) for i in range(1, 17)]
+    nmf_loadings1.columns = component_columns
     #print(nmf_loadings1.shape)
 
 
@@ -98,19 +95,13 @@ def master_dataset() -> None:
 
     # Add a "component" column indicates the component number 
     # with the largest presence value
-    COMPONENT_COLUMNS = ["C1",    "C2",    "C3",    "C4",    "C5",    "C6",
-            "C7",    "C8",    "C9",    "C10",    "C11",    "C12",    "C13", 
-            "C14",    "C15",    "C16",]
     DHS_Index_and_Vocabulary_metadata["component"] = (
-        DHS_Index_and_Vocabulary_metadata[COMPONENT_COLUMNS].idxmax(axis=1)\
+        DHS_Index_and_Vocabulary_metadata[component_columns].idxmax(axis=1)\
         .apply(lambda x: int(x[1:])))
     #print(DHS_Index_and_Vocabulary_metadata.head(5))
 
 
-    #### Creating sequence metadata dataframe
-    # The mixture array contains 3.5M x 16 matrix of 
-    # peak presence/absence decomposed into 16 components
-
+    #### Mixture matrix
     # Turning npy file into csv
     mixture_array = np.load(f"{db_path}/2018-06-08NC16_NNDSVD_Mixture.npy").T
     np.savetxt(f"{db_path}/2018-06-08NC16_NNDSVD_Mixture.csv", mixture_array, 
@@ -118,11 +109,11 @@ def master_dataset() -> None:
 
     # Creating nmf_loadings matrix from csv and renaming columns
     nmf_loadings2 = pd.read_csv(f"{db_path}/2018-06-08NC16_NNDSVD_Mixture.csv", 
-                            header=None, names=COMPONENT_COLUMNS)
+                            header=None, names=component_columns)
     #print(nmf_loadings2.shape)
 
 
-    # DHS_Index_and_Vocabulary contains 
+    #### Sequence metatdata
     # [seqname, start, end, identifier, mean_signal, numsaples, summit, 
     # core_start, core_end, component]
 
@@ -142,19 +133,20 @@ def master_dataset() -> None:
     #print(df.shape)
 
     # Recreating some of the columns from our original dataset
-    df["component"] = df[COMPONENT_COLUMNS].idxmax(axis=1)\
+    df["component"] = df[component_columns].idxmax(axis=1)\
                         .apply(lambda x: int(x[1:]))
-    df["proportion"] = df[COMPONENT_COLUMNS].max(axis=1) / \
-                        df[COMPONENT_COLUMNS].sum(axis=1)
+    df["proportion"] = df[component_columns].max(axis=1) / \
+                        df[component_columns].sum(axis=1)
     df["total_signal"] = df["mean_signal"] * df["numsamples"]
-    df["proportion"] = df[COMPONENT_COLUMNS].max(axis=1) / \
-                        df[COMPONENT_COLUMNS].sum(axis=1)
+    df["proportion"] = df[component_columns].max(axis=1) / \
+                        df[component_columns].sum(axis=1)
     df["dhs_id"] = df[["seqname", "start", "end", "summit"]]\
                         .apply(lambda x: "_".join(map(str, x)), axis=1)
     df["DHS_width"] = df["end"] - df["start"]
 
     # Creating sequence column
     df = add_sequence_column(df, genome, 200)
+
     # Changing seqname column to chr
     df = df.rename(columns={"seqname": "chr"})
     #print(df.shape)
@@ -167,7 +159,7 @@ def master_dataset() -> None:
     #print(df.shape)
     
 
-    # Binary peak matrix file
+    #### Binary peak matrix file
 
     # Opening file
     binary_matrix = pd.read_table(f"{db_path}/dat_bin_FDR01_hg38.txt", header=None)
@@ -182,7 +174,7 @@ def master_dataset() -> None:
     #print(binary_matrix.head(5))
     #print(binary_matrix.shape)
 
-    # Combining human DHS metadata with binary peak matrix
+    # Combining master data with binary matrix (~3.6M x 744)
     # ["dhs_id", "chr", "start", "end", "DHS_width", "summit",
     #  "numsamples", "total_signal", "component", "proportion", 
     #  "sequence", 733 celltype_encodeIDs]
@@ -197,6 +189,9 @@ def master_dataset() -> None:
 
 
 def filter_master(cell_list: List[str]) -> pd.DataFrame:
+      """
+      Given a specific set of sample, filtering the master dataset.
+      """
       
       d_path = "./data"
       
@@ -211,19 +206,61 @@ def filter_master(cell_list: List[str]) -> pd.DataFrame:
       return sub_df
 
 
+def seq2kmer(seq, k: int):
+    """
+    Convert original sequence to kmers
+    
+    Arguments:
+    seq -- str, original sequence.
+    k -- int, kmer of length k specified.
+    
+    Returns:
+    kmers -- str, kmers separated by space
+
+    """
+    kmer = [seq[x:x+k] for x in range(len(seq)+1-k)]
+    kmers = " ".join(kmer)
+
+    return kmers
+
+
+
 def main() -> None:
+    
+    #### Download all necessary data files.   
+    download_data()
 
-    #### Download all necessary data files    
-    #download_data()
+    #### Generate a master dataset with information of DHS and biosamples.
+    master_dataset()    
 
-    #### Generate a master dataset with information of DHS and biosamples
-    master_dataset()
-
-    #### Given a list of samples, filter the master dataset
+    #### Given a list of samples, filtering the master dataset.
     cell_list = ["fLeftVentricle_ENCLB231DPY", "fLeftAtrium_ENCLB226FNM", 
                         "fHeart_ENCLB491BID", "fRightVentricle_ENCLB608VQR"]
-    sub_data = filter_master(cell_list)
-    print(sub_data.head)
+    
+    """
+    ['dhs_id', 'chr', 'start', 'end', 'DHS_width', 'summit', 'numsamples',
+       'total_signal', 'component', 'proportion', 'sequence',
+       'fLeftVentricle_ENCLB231DPY', 'fLeftAtrium_ENCLB226FNM',
+       'fHeart_ENCLB491BID', 'fRightVentricle_ENCLB608VQR', 'TAG',
+       'additional_replicates_with_peak',
+       'other_samples_with_peak_not_considering_reps']
+    """
+    sub_data = filter_master(cell_list)    
+    print(sub_data.columns)
+    
+    #### Convert sequence to the kmer format
+
+    # Select a sequence (from the 10th column "sequence")
+    # from the filtered data.
+    seq = pd.DataFrame(sub_data).iloc[0,10]
+    print(f"sequence: {seq}")
+
+    # Set kmer = 6
+    n_kmer = 6
+
+    # Convert sequence into Kmers format
+    kmers = seq2kmer(seq, n_kmer)
+    print(kmers)
 
 
 
